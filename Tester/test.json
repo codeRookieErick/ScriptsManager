@@ -1,0 +1,9 @@
+{
+  "nombre": "perro",
+  "Apellido": "jose",
+  "Otro": [1,2,3,[ 3, 4, 5 ],8,6],
+  "OtroMas": {
+    "uno": "1",
+    "dos": 2
+  }
+}

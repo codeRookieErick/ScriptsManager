@@ -1,0 +1,24 @@
+﻿<xml>
+  <process
+		name="PHP Example"
+		script="index.php"
+		arguments="-S 0.0.0.0:8001"
+		filename="php.exe"
+		workingDirectory="..\scripts\php\example\"
+		language="PHP"
+		icon="php.png"
+    autorun="true"
+    backgroundColor="136, 146, 191"
+		>
+    <environment>
+      <var name="PHP_INCLUDE_PATH" value="..\lib\php" override="true"/>
+      <var name="PYTHON_INCLUDE_PATH" value="..\lib\python" override="true"/>
+      <var name="NODE_INCLUDE_PATH" value="..\lib\node" override="true"/>
+    </environment>
+    <listen>
+      <signal name="KILL_PROC" action="kill"/>
+      <signal name="RECYCLE_PROC" action="recycle"/>
+      <signal name="RESET" action="reset"/>
+    </listen>
+  </process>
+</xml>

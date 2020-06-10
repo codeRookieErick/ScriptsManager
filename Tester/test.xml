@@ -1,0 +1,26 @@
+<xml>
+	<process 
+		name="Test"
+		script="main.py"
+		arguments="${script}"
+		filename="python.exe"
+		workingDirectory="E:\projects\C#\ScriptsManager\ScriptsManager\python"
+		language=""
+		icon="python.png"
+    autorun="true"
+		>
+		<environment>
+			<var name="test" value="" override="true"/>
+		</environment>
+		<listen>
+			<signal name="KILL_PROC" action="kill"/>
+			<signal name="RECYCLE_PROC" action="recycle"/>
+			<signal name="RESET" action="reset"/>
+		</listen>
+		<meta>
+			backgroundColor:255, 0, 0;
+			textColor:0,0,0;
+			title:"my test"
+		</meta>
+	</process>
+</xml>

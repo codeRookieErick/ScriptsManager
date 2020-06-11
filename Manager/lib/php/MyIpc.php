@@ -16,6 +16,7 @@ function send($port, $data = "hello")
     }
 }
 
+
 function create_control($port, $type, $name){
     send($port, "create-control '$type' '$name';");
 }

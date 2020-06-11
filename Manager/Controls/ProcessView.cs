@@ -13,6 +13,7 @@ namespace ScriptsManager.Controls
 {
     public partial class ProcessView : UserControl
     {
+        const int MAX_MESSAGES_COUNT = 32;
         RotableCollection<string> CommandsHistory = new RotableCollection<string>();
         Queue<string> MessagesHistory = new Queue<string>();
         public ProcessView()
@@ -54,8 +55,36 @@ namespace ScriptsManager.Controls
                 manager.ControlRemoved += ManagerControlRemoved;
                 manager.MessageReceived += ManagerMessageReceived;
                 manager.NotificationSended += ManagerNotificationSended;
+                manager.ProcessOutput += ManagerProcessOutput;
+                manager.ProcessError += ManagerProcessError;
                 manager.Controls.ToList().ForEach(c => ManagerControlAdded(this, c.Value));
             }
+        }
+
+        void PrintMessage(string message, Color color)
+        {
+            this.Invoke((MethodInvoker)(() => {
+                lock (MessagesHistory)
+                {
+                    MessagesHistory.Enqueue(message);
+                    while(MessagesHistory.Count > MAX_MESSAGES_COUNT)
+                    {
+                        MessagesHistory.Dequeue();
+                    }
+                    textBox2.Lines = MessagesHistory.Reverse().ToArray();
+                    textBox2.ForeColor = color;
+                }        
+            }));
+        }
+
+        private void ManagerProcessError(string obj)
+        {
+            PrintMessage(obj, Color.Red);
+        }
+
+        private void ManagerProcessOutput(string obj)
+        {
+            PrintMessage(obj, Color.White);
         }
 
         private void ManagerNotificationSended(object sender, (string title, string message) e)
@@ -67,16 +96,14 @@ namespace ScriptsManager.Controls
 
         private void ManagerMessageReceived(object sender, string e)
         {
-            MessagesHistory.Enqueue(e);
-            while (MessagesHistory.Count > 10) MessagesHistory.Dequeue();
-            this.Invoke((MethodInvoker)(() => {
-                UpdateMessagesView();
-            }));
+            PrintMessage(e, Color.White);
         }
 
         private void panel3_ControlAdded(object sender, ControlEventArgs e)
         {
             e.Control.Dock = DockStyle.Top;
+            e.Control.ForeColor = Color.FromArgb(240, 240, 240);
+            e.Control.BackColor = panel3.BackColor;
         }
 
         private void ManagerControlAdded(object sender, Control e)
@@ -102,6 +129,7 @@ namespace ScriptsManager.Controls
         void Send(string data)
         {
             this.manager?.Send(data);
+            PrintMessage(data, Color.White);
         }
 
         private void ManagerValueChanged(object sender, string e)
@@ -134,23 +162,23 @@ namespace ScriptsManager.Controls
                     label4.Text = string.Format("Working directory: {0}", Manager.GetValue("workingDirectory", "..."));
                     label5.Text = string.Format("Processor time: not running");
                     label6.Text = string.Format("Start time: not running", Manager.Process?.StartTime);
-                    textBox2.Text = "";
+                    //textBox2.Text = "";
                     panel3.Controls.Clear();
                     Manager?.Controls?.Clear();
                 }
 
-                if (Manager?.Process.HasExited??true)
+                if (Manager?.Process?.HasExited??true)
                 {
-                    label7.Text = "Proccess has exited or not started yet.";
-                    label7.ForeColor = Color.Red;
+                    processIdLabel.Text = "Proccess has exited or not started yet.";
+                    processIdLabel.ForeColor = Color.Red;
                 }
                 else
                 {
-                    label7.Text = $"PID: {Manager.Process?.Id.ToString()}";
-                    label7.ForeColor = Color.Black;
+                    processIdLabel.Text = $"PID: {Manager.Process?.Id.ToString()}";
+                    processIdLabel.ForeColor = Color.White;
                 }
 
-                pictureBox2.BackColor = pictureBox3.BackColor = Manager.BackgroundColor;
+                pictureBox3.BackColor = Manager.BackgroundColor;
                 pictureBox1.Image = Manager.Icon;
 
                 button1.Visible = Manager.Status == ScriptProcessManager.ProcessStatus.Running;
@@ -162,17 +190,12 @@ namespace ScriptsManager.Controls
             }
         }
 
-        void UpdateMessagesView()
-        {
-            textBox2.Text = "";
-            textBox2.Lines = MessagesHistory.ToArray();
-            //MessagesHistory.ForEach(m => textBox2.Text = m + textBox2.Text);
-        }
 
         public ProcessView(ScriptProcessManager manager)
         {
             InitializeComponent();
             Manager = manager;
+            Dock = DockStyle.Top;
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -223,7 +246,27 @@ namespace ScriptsManager.Controls
 
         private void button3_Click(object sender, EventArgs e)
         {
-            manager.Reset();
+            Manager.Reset();
+        }
+
+        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        {
+            textBox2.Focus();
+        }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!e.Control)
+            {
+                
+                textBox1.Focus();
+                string keyPressed = e.KeyCode.ToString();
+                if(keyPressed.Length == 1)
+                {
+                    textBox1.Text += keyPressed;
+                }
+                textBox1.SelectionStart = textBox1.Text.Length;
+            }
         }
     }
 

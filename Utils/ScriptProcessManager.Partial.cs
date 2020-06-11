@@ -22,13 +22,22 @@ namespace ScriptsManager.Utils
         public void Kill()
         {
             if (Status == ProcessStatus.Stopped) return;
-            if (!(Process?.HasExited ?? true))
-            {
-                Process.Kill();
-                Process.WaitForExit();
-            }
-            Ipc?.Kill();
             Status = ProcessStatus.Stopped;
+            try
+            {
+                if (!(Process?.HasExited ?? true))
+                {
+                    Process.Kill();
+                    Process.WaitForExit();
+                }
+            }
+            finally { }
+
+            try
+            {
+                Ipc?.Kill();
+            }
+            finally { }
         }
 
         [IPCCommand("create-control")]

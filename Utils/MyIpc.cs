@@ -87,7 +87,7 @@ namespace ScriptsManager.Utils
                             handler.Shutdown(SocketShutdown.Both);
                             handler.Close();
                             socket.BeginAccept(asyncCallback, socket);
-                        }catch(Exception e)
+                        }catch(Exception)
                         {
 
                         } 
@@ -99,11 +99,11 @@ namespace ScriptsManager.Utils
                 {
                 }
             }
-            catch(ThreadAbortException e)
+            catch(ThreadAbortException)
             {
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -120,7 +120,7 @@ namespace ScriptsManager.Utils
                     );
                 sendSocket.Shutdown(SocketShutdown.Both);
                 sendSocket.Close();
-            }catch(Exception e)
+            }catch(Exception)
             {
 
             }
@@ -140,7 +140,7 @@ namespace ScriptsManager.Utils
                 MainThread.Join();
                 MainThread.Abort();
             }
-            catch(Exception e)
+            catch(Exception)
             {
 
             }

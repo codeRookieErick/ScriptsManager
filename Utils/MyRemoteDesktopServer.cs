@@ -89,7 +89,7 @@ namespace ScriptsManager.Utils
             {
                 packet = (T)(new BinaryFormatter().Deserialize(new MemoryStream(data)));
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

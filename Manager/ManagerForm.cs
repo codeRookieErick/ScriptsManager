@@ -191,5 +191,10 @@ namespace ScriptsManager
             
             textBox2.Focus();
         }
+
+        private void panel2_MouseClick(object sender, MouseEventArgs e)
+        {
+            textBox1.Focus();
+        }
     }
 }

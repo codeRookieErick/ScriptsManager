@@ -40,8 +40,9 @@ namespace ScriptsManager.Utils
         public event EventHandler<Control> ControlRemoved;
         public event EventHandler<string> DataReceived;
         public event EventHandler<(string title, string message)> NotificationSended;
+        public event Action<string> ProcessOutput;
+        public event Action<string> ProcessError;
         public Process Process { get; private set; }
-
         Dictionary<string, string> Values { get; }
             = new Dictionary<string, string>();
         Dictionary<string, (string value, bool overrideValue)> EnvironmentVariables { get; }
@@ -52,6 +53,8 @@ namespace ScriptsManager.Utils
 
         Dictionary<string, Action> Commands { get; }
             = new Dictionary<string, Action>();
+
+        public string SourcePath { get; set; }
 
         public void SetValue(string name, string value)
         {
@@ -143,8 +146,6 @@ namespace ScriptsManager.Utils
         {
             LoadCommands();
         }
-
-
         public void Start(bool reset = false)
         {
             if (Status == ProcessStatus.Running && !reset) return;
@@ -152,15 +153,36 @@ namespace ScriptsManager.Utils
             Ipc = MyIpc.Create(ProcessData);
             this.Process = null;
             Process localProcess = new Process();
+
+            string arguments = GetValue("arguments", "");
+            string fileName = GetValue("filename", "");
+
+            string workingDirectory = GetValue("workingDirectory", Directory.GetCurrentDirectory());
+            if (!Directory.Exists(workingDirectory))
+            {
+                string rootPath = Path.GetDirectoryName(SourcePath);
+                workingDirectory = Path.Combine(rootPath, workingDirectory);
+                if (!Directory.Exists(workingDirectory))
+                {
+                    workingDirectory = Directory.GetCurrentDirectory();
+                }
+                else
+                {
+                    workingDirectory = Path.GetFullPath(workingDirectory);
+                }
+            }
+
             localProcess.StartInfo = new ProcessStartInfo
             {
-                FileName = GetValue("filename", null),
-                Arguments = GetValue("arguments", ""),
-                WorkingDirectory = GetValue("workingDirectory", Directory.GetCurrentDirectory()),
+                FileName = fileName,
+                Arguments = arguments,
+                WorkingDirectory = workingDirectory,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 UseShellExecute = false
             };
+
             foreach (var env in EnvironmentVariables)
             {
                 if (env.Value.overrideValue || !localProcess.StartInfo.EnvironmentVariables.ContainsKey(env.Key))
@@ -168,22 +190,43 @@ namespace ScriptsManager.Utils
                     localProcess.StartInfo.EnvironmentVariables[env.Key] = env.Value.value;
                 }
             }
+
             localProcess.StartInfo.EnvironmentVariables["MY_IPC_SERVER_PORT"] = Ipc.ClientPort.ToString();
             localProcess.StartInfo.EnvironmentVariables["MY_IPC_CLIENT_PORT"] = Ipc.ServerPort.ToString();
+            
             localProcess.Start();
             this.Process = localProcess;
+
             localProcess.Exited += (o, e) => {
                 Kill();
             };
+
+            localProcess.OutputDataReceived += OnProcessData;
+            localProcess.ErrorDataReceived += OnProcessError;
+
+            Process.BeginErrorReadLine();
+            Process.BeginOutputReadLine();
+
             Status = ProcessStatus.Running;
         }
-
         private void ProcessData(string data)
         {
             data.Split(';')
                 .Where(s => !string.IsNullOrEmpty(s))
                 .ToList()
                 .ForEach(l => DataReceived?.Invoke(this, l));
+        }
+
+        void OnProcessError(object sender, DataReceivedEventArgs e)
+        {
+            if (Status == ProcessStatus.Stopped) return;
+            ProcessError?.Invoke(e.Data ?? "");
+        }
+
+        void OnProcessData(object sender, DataReceivedEventArgs e)
+        {
+            if (Status == ProcessStatus.Stopped) return;
+            ProcessOutput?.Invoke(e.Data ?? "");
         }
 
         public void Send(string data)
@@ -245,7 +288,10 @@ namespace ScriptsManager.Utils
             }
             foreach (XmlNode processNode in xmlDocument.DocumentElement.SelectNodes("//process"))
             {
-                ScriptProcessManager result = new ScriptProcessManager();
+                ScriptProcessManager result = new ScriptProcessManager()
+                {
+                    SourcePath = path
+                };
                 result.Load(processNode);
                 yield return result;
             }

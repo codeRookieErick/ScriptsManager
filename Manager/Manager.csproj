@@ -127,9 +127,9 @@
     <Content Include="definitions\[Php]-Example.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="definitions\[Python]-Example.xmls">
+    <Content Include="definitions\[Python]-Example.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="icons\javascript.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -142,16 +142,13 @@
     <Content Include="icons\python.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\nodejs\MyIpc.js">
+    <Content Include="lib\nodejs\ScriptsManager.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\nodejs\Worker.js">
+    <Content Include="lib\php\ScriptsManager.php">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\php\MyIpc.php">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\python\MyIpc\__init__.py">
+    <Content Include="lib\python\ScriptsManager\__init__.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="scripts\nodejs\example\server.js">

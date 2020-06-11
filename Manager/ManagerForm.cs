@@ -105,7 +105,7 @@ namespace ScriptsManager
             panel3.Controls.Add(processView);
             EventHandler labelClick = (o, e) => {
                 panel2.Controls.OfType<Label>().ToList().ForEach(l => {
-                    l.ForeColor = l == label ? Color.DodgerBlue : Color.FromArgb(20, 20, 20);
+                    l.ForeColor = l == label ? Color.FromArgb(0, 122, 204):Color.White;
                 });
                 panel3.Controls.OfType<ProcessView>().ToList().ForEach(c => {
                     if (c == processView)

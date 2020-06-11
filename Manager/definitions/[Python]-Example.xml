@@ -1,17 +1,17 @@
 ﻿<xml>
   <process
-		name="NodeJs Example"
-		script="server.js"
+		name="Python Example"
+		script="main.py"
 		arguments="${script}"
-		filename="node.exe"
-		workingDirectory="..\scripts\nodejs\example\"
-		language="Javascript"
-		icon="nodejs.png"
+		filename="python.exe"
+		workingDirectory="..\scripts\python\example\"
+		language="Python"
+		icon="python.png"
     autorun="true"
-    backgroundColor="131, 205, 41"
+    backgroundColor="55, 113, 161"
 		>
     <environment>
-      <var name="NODEJS_INCLUDE_PATH" value="..\..\..\lib\nodejs" override="true"/>
+      <var name="PYTHON_INCLUDE_PATH" value="..\..\..\lib\python" override="true"/>
     </environment>
     <listen>
       <signal name="KILL_PROC" action="kill"/>

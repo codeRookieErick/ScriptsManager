@@ -20,7 +20,7 @@ if (testMode) {
 	}
 }
 
-const MyIpc = require(`${includePath}\\MyIpc`);
+const MyIpc = require(`${includePath}\\ScriptsManager`);
 
 let ipc = new MyIpc(serverPort, clientPort, (d) => {
 	console.log(d);

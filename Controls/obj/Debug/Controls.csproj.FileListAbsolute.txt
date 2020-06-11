@@ -1,5 +1,0 @@
-E:\projects\C#\ScriptsManager\GitVersion\Controls\bin\Debug\Controls.dll
-E:\projects\C#\ScriptsManager\GitVersion\Controls\bin\Debug\Controls.pdb
-E:\projects\C#\ScriptsManager\GitVersion\Controls\obj\Debug\Controls.dll
-E:\projects\C#\ScriptsManager\GitVersion\Controls\obj\Debug\Controls.pdb
-E:\projects\C#\ScriptsManager\GitVersion\Controls\obj\Debug\Controls.csprojAssemblyReference.cache

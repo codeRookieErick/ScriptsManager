@@ -1,22 +1,35 @@
 import sys
-sys.path.insert(1, "D:\\bots\\ScriptsManager\\lib\\python")
+import os
+import time
 
-from MyModules import ModuleAutoLoader, ModulesRunner
-from MyIpc import Worker, Control
+includePath = os.getenv('PYTHON_INCLUDE_PATH') 
+sys.path.insert(1, includePath)
 
-ipc = Worker()
-progressBar = Control("MyIpcProgressBar", "progressBar")
-ipc.addControl(progressBar)
+clientPort = os.getenv('MY_IPC_CLIENT_PORT')
+serverPort = os.getenv('MY_IPC_SERVER_PORT')
+from ScriptsManager import MyIpc
 
-def methodCalled(name, count, size):
-    progressBar.setProperty("Title", name)
-    progressBar.setProperty("Maximun", size)
-    progressBar.setProperty("Value", count)
 
-def onPrint(data):
-    ipc.print(data)
+run = True
+def receive(data):
+    if data != 'exit':
+        print("send 'exit' to exit")
+    else:
+        exit(0)
 
-with ModulesRunner('workers', ['main']) as k:
-    k.onMethodCalled = methodCalled
-    k.onPrint = onPrint
-    k.mainEventLoop()
+ipc = MyIpc(serverPort, clientPort, receive)
+
+max = 10
+n = 0
+print('Running', flush=True)
+while run:
+    n = n+1 if n < max-1 else 0
+    ipc.set_control('progress', 'MyIpcProgressBar', {
+            "Title":"Progress from python!",
+            "Maximun":max,
+            "Value":n
+        })
+    time.sleep(1)
+    
+print('Exiting...', flush=True)
+ipc.kill()

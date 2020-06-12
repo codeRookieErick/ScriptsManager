@@ -1,4 +1,25 @@
-﻿using System;
+﻿    /*
+    ScriptsManager, Administrador de scripts
+    Copyright (C) 2020 Erick Mora
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    erickfernandomoraramirez@gmail.com
+    erickmoradev@gmail.com
+    https://dev.moradev.dev/myportfolio
+    */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -118,7 +139,7 @@ namespace ScriptsManager.Utils
                 {
                     return Image.FromFile(".\\icons\\" + GetValue("icon", "default.png"));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return new Bitmap(10, 10);
                 }
@@ -267,7 +288,7 @@ namespace ScriptsManager.Utils
                     Start();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -282,7 +303,7 @@ namespace ScriptsManager.Utils
                 xmlDocument.Load(path);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -322,7 +343,7 @@ namespace ScriptsManager.Utils
                 {
                     commandsStack.Pop()();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }

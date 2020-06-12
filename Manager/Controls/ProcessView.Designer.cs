@@ -389,6 +389,8 @@
             this.Name = "ProcessView";
             this.Padding = new System.Windows.Forms.Padding(8);
             this.Size = new System.Drawing.Size(865, 398);
+            this.Load += new System.EventHandler(this.ProcessView_Load);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ProcessViewMouseClick);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();

@@ -77,6 +77,10 @@ namespace ScriptsManager.Utils
 
         public string SourcePath { get; set; }
 
+        public string FileName { get; private set; }
+        public string Arguments { get; private set; }
+        public string WorkingDirectory { get; private set; }
+
         public void SetValue(string name, string value)
         {
             Values[name] = value;
@@ -175,29 +179,13 @@ namespace ScriptsManager.Utils
             this.Process = null;
             Process localProcess = new Process();
 
-            string arguments = GetValue("arguments", "");
-            string fileName = GetValue("filename", "");
-
-            string workingDirectory = GetValue("workingDirectory", Directory.GetCurrentDirectory());
-            if (!Directory.Exists(workingDirectory))
-            {
-                string rootPath = Path.GetDirectoryName(SourcePath);
-                workingDirectory = Path.Combine(rootPath, workingDirectory);
-                if (!Directory.Exists(workingDirectory))
-                {
-                    workingDirectory = Directory.GetCurrentDirectory();
-                }
-                else
-                {
-                    workingDirectory = Path.GetFullPath(workingDirectory);
-                }
-            }
+            
 
             localProcess.StartInfo = new ProcessStartInfo
             {
-                FileName = fileName,
-                Arguments = arguments,
-                WorkingDirectory = workingDirectory,
+                FileName = this.FileName,
+                Arguments = this.Arguments,
+                WorkingDirectory = this.WorkingDirectory,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -280,6 +268,23 @@ namespace ScriptsManager.Utils
                     if (Commands.ContainsKey(action))
                     {
                         ListenToSignals[name] = action;
+                    }
+                }
+
+                Arguments = GetValue("arguments", "");
+                FileName = GetValue("filename", "");
+                WorkingDirectory = GetValue("workingDirectory", Directory.GetCurrentDirectory());
+                if (!Directory.Exists(WorkingDirectory))
+                {
+                    string rootPath = Path.GetDirectoryName(SourcePath);
+                    WorkingDirectory = Path.Combine(rootPath, WorkingDirectory);
+                    if (!Directory.Exists(WorkingDirectory))
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory();
+                    }
+                    else
+                    {
+                        WorkingDirectory = Path.GetFullPath(WorkingDirectory);
                     }
                 }
 

@@ -1,6 +1,4 @@
-<?
-
-    /*
+    /*<!--
     ScriptsManager, Administrador de scripts
     Copyright (C) 2020 Erick Mora
 
@@ -20,7 +18,11 @@
     erickfernandomoraramirez@gmail.com
     erickmoradev@gmail.com
     https://dev.moradev.dev/myportfolio
-	*/
+	-->*/
+
+<?
+
+
 	
 	set_include_path(getenv("PHP_INCLUDE_PATH") ?? ".");
 	require("ScriptsManager.php");

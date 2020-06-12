@@ -29,6 +29,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScriptsManager.Utils;
+using System.Diagnostics;
+using System.IO;
 
 namespace ScriptsManager.Controls
 {
@@ -287,6 +289,40 @@ namespace ScriptsManager.Controls
                     textBox1.Text += keyPressed;
                 }
                 textBox1.SelectionStart = textBox1.Text.Length;
+            }
+        }
+        void ShowInExplorer()
+        {
+            Process.Start("explorer.exe", Manager.WorkingDirectory);
+        }
+
+        void CmdHere()
+        {
+            Process.Start(new ProcessStartInfo() { 
+                FileName = "cmd.exe",
+                WorkingDirectory = Manager.WorkingDirectory
+            });
+        }
+        private void ProcessViewMouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                var menu = new ContextMenu(
+                        new MenuItem[]
+                        {
+                        new MenuItem("Open in explorer", (obj,evt)=>ShowInExplorer()){},
+                        new MenuItem("Cmd here...", (obj,evt)=>CmdHere())
+                        }
+                    );
+                menu.Show(this, PointToClient(MousePosition));
+            }
+        }
+
+        private void ProcessView_Load(object sender, EventArgs e)
+        {
+            foreach(Label label in this.Controls.OfType<Label>())
+            {
+                label.MouseClick += ProcessViewMouseClick;
             }
         }
     }

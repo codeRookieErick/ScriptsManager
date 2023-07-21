@@ -1,18 +1,18 @@
 # Scripts Manager #
 
-Scripts Manager es una aplicacion de Windows ideada para administrar multiples scripts concurrentes. Actualmente soporta scripts de Python, PHP y NodeJS.
+Scripts Manager is a Windows application designed to manage multiple concurrent scripts. It currently supports Python, PHP, and NodeJS scripts.
 
-Usa System.Diagnostics.Process para administrar los procesos de los scripts, y Sockets para "comunicarse" con dichos procesos (La implementacion no es completa, pero ya los scripts pueden invocar la creacion de controles de usuarios en el administrador)
+Use System.Diagnostics.Process to manage the processes of the scripts, and Sockets to "communicate" with these processes (The implementation is not complete, but the scripts can already invoke the creation of user controls in the administrator)
 
-## Instalación ##
+## Installation ##
 
-La solución esta lista para ejecutarse en visual studio 2019 o superior. Sin embargo, para poder ejecutar los ejemplos se necesitan agregar las dependencias y preparar el entorno de cada uno. A continuación listo los pasos necesarios para preparar los entornos.
+The solution is ready to run in visual studio 2019 or higher. However, in order to run the examples, you need to add the dependencies and prepare the environment for each one. Below I list the necessary steps to prepare the environments.
 
 ### python ###
 
-El ejemplo esta hecho en python 3. Por lo tanto se requiere esta version del interprete.
+The example is done in python 3. Therefore this version of the interpreter is required.
 
-1. El archivo _ScriptsManager.py_, requerido para la comunicacion con el administrador, importa los siguientes paquetes:
+1. The _ScriptsManager.py_ file, required for communication with the manager, imports the following packages:
 
    *   _thread
    *   threading
@@ -22,37 +22,36 @@ El ejemplo esta hecho en python 3. Por lo tanto se requiere esta version del int
    *   time
    *   re
 
-Me parece que todos los paquetes vienen en la instalación por defecto de python 3+, pero de no ser asi, es necesario obtenerlos. 
+It seems to me that all the packages come with the default python 3+ installation, but if not, you need to get them.
 
-2. Es necesario tambien que la ruta del interprete de python este disponible en la variable de entorno **PATH**. Si no sabes como agregarla, consulta [Este articulo](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee537574(v%3Doffice.14)#:~:text=To%20add%20a%20path%20to%20the%20PATH%20environment%20variable&text=In%20the%20System%20dialog%20box,to%20Path%20and%20select%20it.)   
+2. It is also necessary that the path of the python interpreter is available in the **PATH** environment variable. If you don't know how to add it, check [this article](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee537574(v%3Doffice.14)#:~:text=To%20add%20a%20path%20to%20the%20PATH%20environment%20variable&text=In%20the%20System%20dialog%20box,to%20Path%20and%20select%20it.)   
    
-3. Asegurate que en dicha ruta exista un ejecutable llamado "python.exe", sin las comillas. Si en su ruta de instalacion se encuentra el ejecutable del interprete, pero este tiene otro nombre, debera modificar la linea **6** de [este](./Manager/definitions/[Python]-Example.xml) archivo (_solo el **nombre** del ejecutable, sin la ruta_).
+3. Make sure that in this path there is an executable called "python.exe", without the quotes. If the interpreter executable is found in your installation path, but it has another name, you must modify the line **6** of [this](./Manager/definitions/[Python]-Example.xml) file (_just the excutable **name** not the path_).
 
 ```xml
 <process
     ...
-    filename="[Nombre de tu ejecutable de python]"
+    filename="[Python executable name]"
     ...
 />
 ```
-Si no tienes python3 instalado, puedes obtenerlo de la [Página oficial](https://www.python.org/downloads/)
+If you don't have Python 3 installed, you can get it from the [Official Page](https://www.python.org/downloads/)
 
 ### Nodejs ###
 
-La librería ScripsManager.js usa funciones flecha, por lo que se requiere una version de NodeJs con soporte para EcmaScript6. No creo que exista alguna version que no lo use, asi que no deberia haber problemas. Aparte, las unicas dos librerías que se importan son [net](https://nodejs.org/api/net.html) y [http](https://nodejs.org/api/http.html) ambas obligatoriamente incluidas en toda version NodeJs. Asi que una instalacion por defecto de NodeJs deberia ser suficiente. 
+The ScripsManager.js library uses arrow functions, so a version of NodeJs with EcmaScript6 support is required. I don't think there is any supported version that doesn't use it, so there shouldn't be any problems. Besides, the only two libraries that are imported are [net](https://nodejs.org/api/net.html) and [http](https://nodejs.org/api/http.html), both included in every NodeJs version. So a default NodeJs installation should suffice.
 
-Al igual que con python, es necesario tambien que la ruta de nodejs este disponible en la variable de entorno **PATH**. Y en esta ruta, el interprete debe llamarse "node.exe", sin las comillas. De no ser asi debes modificar la linea **6** de [este otro](./Manager/definitions/[NodeJs]-Example.xml) archivo, tal como lo hiciste con el de python.
+As with python, it is also necessary that the nodejs path is available in the **PATH** environment variable. And in this path, the interpreter must be called "node.exe", without the quotes. If not, you must modify line **6** of [this another file](./Manager/definitions/[NodeJs]-Example.xml), just like you did with the one in python.
  
 ```xml
 <process
     ...
-    filename="[Nombre de tu ejecutable de node]"
+    filename="[Node executable name]"
     ...
 />
 ```
-
-Si no tienes NodeJs instalado, puedes obtenerlo de la [Página oficial](https://nodejs.org/en/download/)
+If you don't have NodeJS installed, you can get it from the [Official Page](https://nodejs.org/en/download/)
 
 ### PHP ###
-Próximamente estaré actualizando esta seccion
+Soon I will be updating this section...
 
